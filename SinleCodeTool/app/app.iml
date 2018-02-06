@@ -113,7 +113,9 @@
     <orderEntry type="library" exported="" name="gson-2.7" level="project" />
     <orderEntry type="library" exported="" name="converter-gson-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-26.0.0-alpha1" level="project" />
+    <orderEntry type="library" exported="" name="tinypinyin-2.0.3" level="project" />
     <orderEntry type="library" exported="" name="rxandroid-2.0.1" level="project" />
+    <orderEntry type="library" exported="" name="ahocorasick-0.3.0" level="project" />
     <orderEntry type="library" exported="" name="okhttp-3.2.0" level="project" />
     <orderEntry type="library" exported="" name="okhttp-3.3.0" level="project" />
     <orderEntry type="library" exported="" name="retrofit2-rxjava2-adapter-1.0.0" level="project" />
