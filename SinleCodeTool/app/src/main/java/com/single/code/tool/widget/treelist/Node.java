@@ -1,0 +1,214 @@
+package com.single.code.tool.widget.treelist;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * http://blog.csdn.net/lmj623565791/article/details/40212367
+ * @author zhy
+ *
+ */
+public class Node
+{
+
+	private String id;
+	/**
+	 * 根节点pId为0
+	 */
+	private String pId ;
+
+	private String name;
+
+	private String number;
+
+	private int type;
+
+	private String orgName;
+
+	private static final int  USER_TYPE = 2; // type为2代表是联系人而非组织
+	/**
+	 * 当前的级别
+	 */
+	private int level;
+
+	/**
+	 * 是否展开
+	 */
+	private boolean isExpand = false;
+
+	private int icon;
+
+	/**
+	 * 下一级的子Node
+	 */
+	private List<Node> children = new ArrayList<Node>();
+
+	/**
+	 * 父Node
+	 */
+	private Node parent;
+
+	public Node()
+	{
+	}
+
+	public Node(String id, String pId, String name, String number, int type, String orgName)
+	{
+		super();
+		this.id = id;
+		this.pId = pId;
+		this.name = name;
+		this.number = number;
+		this.type = type;
+		this.orgName = orgName;
+	}
+
+	public int getIcon()
+	{
+		return icon;
+	}
+
+	public void setIcon(int icon)
+	{
+		this.icon = icon;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getpId() {
+		return pId;
+	}
+
+	public void setpId(String pId) {
+		this.pId = pId;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public void setLevel(int level)
+	{
+		this.level = level;
+	}
+
+	public boolean isExpand()
+	{
+		return isExpand;
+	}
+
+	public List<Node> getChildren()
+	{
+		return children;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public void setChildren(List<Node> children)
+	{
+		this.children = children;
+	}
+
+	public Node getParent()
+	{
+		return parent;
+	}
+
+	public void setParent(Node parent)
+	{
+		this.parent = parent;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public String getOrgName() {
+		return orgName;
+	}
+
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+
+	/**
+	 * 是否为跟节点
+	 * 
+	 * @return
+	 */
+	public boolean isRoot()
+	{
+		return parent == null;
+	}
+
+	/**
+	 * 判断父节点是否展开
+	 * 
+	 * @return
+	 */
+	public boolean isParentExpand()
+	{
+		if (parent == null)
+			return false;
+		return parent.isExpand();
+	}
+
+	/**
+	 * 是否是叶子界点
+	 * 
+	 * @return
+	 */
+	public boolean isLeaf()
+	{
+		return type == USER_TYPE;
+	}
+
+	/**
+	 * 获取level
+	 */
+	public int getLevel()
+	{
+		return parent == null ? 0 : parent.getLevel() + 1;
+	}
+
+	/**
+	 * 设置展开
+	 * 
+	 * @param isExpand
+	 */
+	public void setExpand(boolean isExpand)
+	{
+		this.isExpand = isExpand;
+		if (!isExpand)
+		{
+
+			for (Node node : children)
+			{
+				node.setExpand(isExpand);
+			}
+		}
+	}
+
+}
