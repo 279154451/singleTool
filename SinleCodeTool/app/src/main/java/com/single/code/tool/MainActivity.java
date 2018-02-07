@@ -2,7 +2,9 @@ package com.single.code.tool;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -10,6 +12,23 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.single.code.tool.bluetooth.ble.api.BLEAdvertiser;
+import com.single.code.tool.bluetooth.ble.api.BLEHelper;
+import com.single.code.tool.bluetooth.ble.api.BLEProfile;
+import com.single.code.tool.bluetooth.ble.api.BLEScanHelper;
+import com.single.code.tool.bluetooth.ble.api.BLEScanner;
+import com.single.code.tool.bluetooth.ble.callback.IBLECallback;
+import com.single.code.tool.bluetooth.ble.entity.ScanData;
+import com.single.code.tool.bluetooth.classic.api.BluetoothHelper;
+import com.single.code.tool.bluetooth.classic.api.BluetoothProfile;
+import com.single.code.tool.bluetooth.classic.api.BluetoothScanner;
+import com.single.code.tool.bluetooth.classic.callback.IBluetoothCallback;
+import com.single.code.tool.bluetooth.classic.callback.IPairCallback;
+import com.single.code.tool.bluetooth.classic.callback.IScanCallback;
+import com.single.code.tool.bluetooth.classic.entity.SendRate;
+import com.single.code.tool.bluetooth.classic.entity.State;
+import com.single.code.tool.bluetooth.classic.protocol.PackageUtil;
+import com.single.code.tool.bluetooth.classic.receiver.PairBroadcastReceiver;
 import com.single.code.tool.policy.PolicyManager;
 import com.single.code.tool.bluetooth.classic.protocol.ZipTool;
 import com.single.code.tool.syncdb.DBTestManager;
@@ -17,6 +36,7 @@ import com.single.code.tool.util.SystemUtil;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 public class MainActivity extends Activity {
     private PolicyManager policyManager;
@@ -151,6 +171,118 @@ public class MainActivity extends Activity {
                 }
             }
         }).start();
+    }
+
+    private void testBle(){
+        BluetoothScanner bluetoothScanner = new BluetoothScanner(getApplicationContext(), new IScanCallback<BluetoothDevice>() {
+            @Override
+            public void discoverDevice(BluetoothDevice bluetoothDevice) {
+                //TODO 扫描到的经典蓝牙设备
+            }
+
+            @Override
+            public void scanTimeout() {
+
+            }
+
+            @Override
+            public void scanFinish(List<BluetoothDevice> bluetoothDevices) {
+
+            }
+        });
+        bluetoothScanner.startScan();//开启扫描
+        bluetoothScanner.stopScan();//关闭扫描
+    }
+
+    private void testBleCon(){
+        //注册Listener接收链接状态和读写数据结果
+        BluetoothHelper.HELPER.setCallback(new IBluetoothCallback<byte[]>() {
+            @Override
+            public void connectStateChange(State state, int type) {
+
+            }
+
+            @Override
+            public void writeData(byte[] data, int type) {
+
+            }
+
+            @Override
+            public void readData(byte[] data, int type) {
+
+            }
+
+            @Override
+            public void setDeviceName(String name) {
+
+            }
+
+            @Override
+            public void sendRate(SendRate sendRate) {
+
+            }
+
+            @Override
+            public void startSend(long fileid, long startTime) {
+
+            }
+
+            @Override
+            public void endSend(long fileid, long endTime) {
+
+            }
+        });
+    }
+
+    private void testBLE(){
+
+        BLEScanHelper.HELPER.startScan(getApplicationContext(), new BLEScanner.IScanResultListener() {
+            @Override
+            public void onResultReceived(ScanData sanDevice) {
+                BLEHelper.HELPER.startConnect(getApplicationContext(), sanDevice.getBleAddress(), sanDevice.getDeviceName());//发起BLE链接
+            }
+
+            @Override
+            public void onScanFailed(int errorCode) {
+
+            }
+
+            @Override
+            public void onScanUpdate(ScanData scanData) {
+
+            }
+        });
+        //注册Listener接收链接状态和接收数据
+        BLEHelper.HELPER.setBLECallBack(new IBLECallback() {
+            @Override
+            public void onConnected(int type) {
+
+            }
+
+            @Override
+            public void onDisconnected() {
+
+            }
+
+            @Override
+            public void onDataReceived(byte[] data, int type) {
+                //接收到的数据
+            }
+        });
+        //模拟BLE信标
+        BLEHelper.HELPER.startBleAdvertiser(getApplicationContext(), new BLEAdvertiser.IAdvertiseResultListener() {
+            @Override
+            public void onAdvertiseSuccess() {
+                //模拟信标成功后，开启服务端，等待链接和接收数据
+                BLEHelper.HELPER.startBleServer(getApplicationContext());
+            }
+
+            @Override
+            public void onAdvertiseFailed(int errorCode) {
+
+            }
+        });
+
     }
 
     @Override

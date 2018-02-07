@@ -23,11 +23,11 @@ public class PackageUtil {
         public static final byte Mp4 = 0x04;
     }
     public class SendType{
-        public static final byte MediaShare = 0x00;
-        public static final byte upload = 0x01;
-        public static final byte Message = 0x02;
-        public static final byte Response = 0x03;
-        public static final byte ParseFinish = 0x04;
+        public static final byte MediaShare = 0x00;//媒体共享
+        public static final byte upload = 0x01;//现场上报
+        public static final byte Message = 0x02;//消息
+        public static final byte Response = 0x03;//response
+        public static final byte ParseFinish = 0x04;//配对状态
     }
 
     public class ResponseCode{

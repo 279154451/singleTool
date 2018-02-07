@@ -115,8 +115,8 @@ public enum BluetoothHelper {
     /**
      * 客户端发起连接
      * @param context
-     * @param device
-     * @param uuid
+     * @param device  要链接的蓝牙设备
+     * @param uuid  蓝牙读写   如public static UUID BLE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
      */
     public synchronized void startClient(Context context, BluetoothDevice device, UUID uuid){
         bluetoothClient = new BluetoothClient(context.getApplicationContext(),device,uuid) {
@@ -199,7 +199,7 @@ public enum BluetoothHelper {
     /**
      * 开启server等待连接线程
      * @param context
-     * @param uuid
+     * @param uuid  蓝牙读写UUID     如public static UUID BLE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
      */
     public void startServer(Context context, UUID uuid){
         if(serverSocket!=null&& serverSocket.isConnected()){
@@ -301,17 +301,20 @@ public enum BluetoothHelper {
         }
     }
 
+
     /**
-     * 向客户端发送文件
-     * @param cmdid
-     * @param minetype
-     * @param file
+     *  向客户端发送文件
+     * @param sendtype PackageUtil.SendType
+     * @param fileid  文件、文本的唯一标识
+     * @param minetype  PackageUtil.MimeType
+     * @param file  文件路径、文本消息
      */
-    public void sendFileToClient(final byte sendtype,final long cmdid, final byte minetype, final String file){
-        SendData sendData = new SendData(cmdid,minetype,sendtype,file);
+    public void sendFileToClient(final byte sendtype,final long fileid, final byte minetype, final String file){
+        SendData sendData = new SendData(fileid,minetype,sendtype,file);
         sendQueue.offer(sendData);
 //        wirteFileToClient(cmdid,minetype,file);
         startSendToClient();
+
     }
 
     private void startSendToClient(){

@@ -13,7 +13,7 @@ import java.util.UUID;
 
 /**
  * 
- * @author yao.guoju
+ * @author czf
  */
 public abstract class BluetoothServer implements Runnable {
 

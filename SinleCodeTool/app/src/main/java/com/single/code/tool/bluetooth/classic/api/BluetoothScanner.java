@@ -60,7 +60,7 @@ public class BluetoothScanner {
      * @param context
      * @param pairCallback
      */
-    private void registerPairListener(Context context, IPairCallback pairCallback){
+    public void registerPairListener(Context context, IPairCallback pairCallback){
         if(mPairBroadcastReceiver == null){
             mPairBroadcastReceiver = new PairBroadcastReceiver(pairCallback);
         }
