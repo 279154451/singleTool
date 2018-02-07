@@ -133,7 +133,7 @@
        }
    (3)删：
    
-   public void delete(Context context){
+   	public void delete(Context context){
            AsyncDbTool dbHelper = new AsyncDbTool(context);
            String selection = ValidDevTable.BEACON_ID+" =?"+" AND "+ValidDevTable.POLICY_ID+" = "+1;
            String[] selectionArgs = new String[]{"111111"};
@@ -156,7 +156,7 @@
        }
    (4)改：
    
-    public void update(Context context){
+   	 public void update(Context context){
            AsyncDbTool dbHelper = new AsyncDbTool(context);
            String selectionSql = ValidDevTable.BEACON_ID+" =?"+" AND "+ValidDevTable.POLICY_ID+" = "+2;
            String[] selectionArgs = new String[]{"111111"};
@@ -182,9 +182,10 @@
                }
            },values,selectionSql,selectionArgs);
        }
-    (5)查：
+       
+ (5)查：
     
-          public void query(Context context){
+        public void query(Context context){
         AsyncDbTool dbHelper = new AsyncDbTool(context);
         dbHelper.query(uri, 2, new DbEventListener() {
             @Override
