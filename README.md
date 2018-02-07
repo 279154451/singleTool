@@ -243,14 +243,16 @@
                                     }
                                 }).create().show();
 6、图片无损压缩:
+
 (1)、引入tiny Module：
+
 	<1>、项目最外层Build.gradle中需要配置
-    dependencies {
+    	dependencies {
             classpath 'com.android.tools.build:gradle:2.2.3'
             classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
             classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         }
-    <2>、gradle-wrapper.properties文件的配置：
+	<2>、gradle-wrapper.properties文件的配置：
   	 #Mon Nov 06 11:36:28 CST 2017
   	 distributionBase=GRADLE_USER_HOME
   	 distributionPath=wrapper/dists
@@ -259,6 +261,7 @@
   	 distributionUrl=https\://services.gradle.org/distributions/gradle-2.14.1-all.zip
          
 (2)、使用：
+
 	<1>初始化：
          projectApplication中初始化：     Tiny.getInstance().debug(true).init(this);
 	
@@ -286,6 +289,7 @@
                  }
              });
 (3)压缩多张文件：
+
          Tiny.BatchFileCompressOptions batchFileCompressOptions = new Tiny.BatchFileCompressOptions();
 	 //默认情况下使用ARGB_8888。您也可以考虑使用RGB_565，它可以节省一半的内存大小。
 
@@ -309,7 +313,8 @@
                     }
                 });
             }
-    (4)单张bitmap压缩：
+(4)单张bitmap压缩：
+
      Tiny.BitmapCompressOptions bitmapCompressOptions = new Tiny.BitmapCompressOptions();
       bitmapCompressOptions.width = 0;//压缩宽，如果值为零，则默认压缩最大宽度是屏幕宽度或{@link CompressKit＃DEFAULT_MAX_COMPRESS_SIZE}。
       bitmapCompressOptions.height = 0;//压缩高，如果值为零，则默认压缩最大高度是屏幕高度或{@link CompressKit＃DEFAULT_MAX_COMPRESS_SIZE}。
@@ -320,7 +325,9 @@
 
                 }
             });
-     (5)多张bitmap压缩：
+	    
+   (5)多张bitmap压缩：
+   
       Tiny.BitmapCompressOptions bitmapCompressOptions = new Tiny.BitmapCompressOptions();
         bitmapCompressOptions.width = 0;//压缩宽，如果值为零，则默认压缩最大宽度是屏幕宽度或{@link CompressKit＃DEFAULT_MAX_COMPRESS_SIZE}。
         bitmapCompressOptions.height = 0;//压缩高，如果值为零，则默认压缩最大高度是屏幕高度或{@link CompressKit＃DEFAULT_MAX_COMPRESS_SIZE}。
@@ -333,7 +340,7 @@
              });
 7、蓝牙
 
-    （1）经典蓝牙：
+   （1）经典蓝牙：
     
 	<1>、扫描：
         
@@ -365,6 +372,7 @@
 		intentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
 		context.registerReceiver(mPairBroadcastReceiver, intentFilter);
 	}
+	
       /**
 	* 取消配对监听
 	* @param context
@@ -424,14 +432,15 @@
 	BluetoothHelper.HELPER.startClient(getApplicationContext(),BluetoothDevice,BluetoothProfile.BLE_UUID);//发起链接
 		  
 	<4>通信：
-        
+	
 	BluetoothHelper.HELPER.sendFileToClient(PackageUtil.SendType.MediaShare, System.currentTimeMillis(), PackageUtil.MimeType.Jpg, filePath);//发送文件、文本消息到客户端
 	BluetoothHelper.HELPER.sendFileToServer(PackageUtil.SendType.MediaShare, System.currentTimeMillis(), PackageUtil.MimeType.Jpg, filePath);//发送文件、文本消息到服务端
 		 
 		 
-	(2)低功耗BLE：
-        
-	<1>    //开启BLE扫描
+(2)、低功耗BLE：
+
+	<1>、 开关启BLE扫描
+	
         BLEScanHelper.HELPER.startScan(getApplicationContext(), new BLEScanner.IScanResultListener() {
             @Override
             public void onResultReceived(ScanData scanData) {
@@ -451,10 +460,9 @@
         //关闭扫描
         BLEScanHelper.HELPER.stopScan();
         
-	<2>连接：
-        
-	//注册Listener接收链接状态和接收数据
-        
+	<2>、连接：
+	
+	//注册Listener接收链接状态和接收数据        
 	BLEHelper.HELPER.setBLECallBack(new IBLECallback() {
 				@Override
 				public void onConnected(int type) {
