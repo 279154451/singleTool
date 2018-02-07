@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.util.Log;
 
+import com.single.code.tool.bluetooth.classic.entity.State;
+
 import java.io.IOException;
 import java.util.UUID;
 
@@ -44,7 +46,7 @@ public abstract class BluetoothServer implements Runnable {
 				e.printStackTrace();
 			}
 			if(serSocket != null) {
-				while(mBluetoothHelper.getmState()!=State.STATE_CONNECTED) {//不在连状态就接收
+				while(mBluetoothHelper.getmState()!= State.STATE_CONNECTED) {//不在连状态就接收
 					try {
                         synchronized (this){
                             if(serSocket!=null){

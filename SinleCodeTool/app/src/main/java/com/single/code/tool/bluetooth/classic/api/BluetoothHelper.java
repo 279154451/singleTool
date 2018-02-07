@@ -10,10 +10,11 @@ import android.util.Log;
 
 
 import com.single.code.tool.bluetooth.classic.callback.IBluetoothCallback;
+import com.single.code.tool.bluetooth.classic.entity.SendData;
+import com.single.code.tool.bluetooth.classic.entity.SendRate;
+import com.single.code.tool.bluetooth.classic.entity.State;
 import com.single.code.tool.bluetooth.classic.protocol.HweProtocol;
 import com.single.code.tool.bluetooth.classic.protocol.HweSender;
-import com.single.code.tool.bluetooth.classic.protocol.SendData;
-import com.single.code.tool.bluetooth.classic.protocol.SendRate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -436,7 +437,7 @@ public enum BluetoothHelper {
     /**
      * 向客户端发送文件
      */
-    private void wirteFileToClient(com.single.code.tool.bluetooth.classic.protocol.SendData sendData){
+    private void wirteFileToClient(SendData sendData){
         if(serverOutputStream!=null){
             sendData.setOutputStream(serverOutputStream);
             HweSender.getSender().sendFile(sendData);

@@ -8,6 +8,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
+import com.single.code.tool.bluetooth.classic.entity.SendData;
+import com.single.code.tool.bluetooth.classic.entity.SendRate;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

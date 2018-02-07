@@ -1,8 +1,8 @@
 package com.single.code.tool.bluetooth.classic.callback;
 
 
-import com.single.code.tool.bluetooth.classic.api.State;
-import com.single.code.tool.bluetooth.classic.protocol.SendRate;
+import com.single.code.tool.bluetooth.classic.entity.SendRate;
+import com.single.code.tool.bluetooth.classic.entity.State;
 
 /**
  * @Description: 消息回调

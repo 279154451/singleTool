@@ -1,9 +1,9 @@
 package com.single.code.tool;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -18,7 +18,7 @@ import com.single.code.tool.util.SystemUtil;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     private PolicyManager policyManager;
     private String TAG = "PolicyManager";
     private Handler handler = new Handler();
