@@ -1,4 +1,4 @@
-package com.single.code.tool.rxjava.http.response;
+package com.single.code.tool.http.response;
 
 /**
  * Created by chen.mingyao on 2016/11/29.

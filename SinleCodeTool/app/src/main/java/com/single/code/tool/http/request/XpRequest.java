@@ -1,8 +1,9 @@
-package com.single.code.tool.rxjava.http.request;
+package com.single.code.tool.http.request;
 
 
-import com.single.code.tool.rxjava.http.body.XpBaseBody;
-import com.single.code.tool.rxjava.http.header.XpHeader;
+
+import com.single.code.tool.http.body.XpBaseBody;
+import com.single.code.tool.http.header.XpHeader;
 
 import java.io.Serializable;
 
@@ -32,7 +33,7 @@ public class XpRequest implements Serializable {
 	private XpBaseBody body;
 	private String method;
 	
-	private XpRequest(XpHeader header,String url,XpBaseBody body,String method) {
+	private XpRequest(XpHeader header, String url, XpBaseBody body, String method) {
 		this.header = header;
 		this.url =  url;
 		this.body = body;

@@ -1,4 +1,4 @@
-package com.single.code.tool.rxjava.http.response;
+package com.single.code.tool.http.response;
 
 import java.io.Serializable;
 

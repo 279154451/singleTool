@@ -1,4 +1,4 @@
-package com.single.code.tool.rxjava.http.header;
+package com.single.code.tool.http.header;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ public class XpHeader implements Serializable {
 	public static class Builder {
 		private Map<String,String> headers = new HashMap<String,String>();
 		
-		public Builder addHeader(String key,String value) {
+		public Builder addHeader(String key, String value) {
 			headers.put(key, value);
 			return this;
 		}

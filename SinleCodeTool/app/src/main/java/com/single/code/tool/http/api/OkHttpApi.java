@@ -1,4 +1,4 @@
-package com.single.code.tool.rxjava.http.api;
+package com.single.code.tool.http.api;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -6,13 +6,13 @@ import android.os.Message;
 import android.text.TextUtils;
 
 
-import com.single.code.tool.rxjava.http.body.XpBaseBody;
-import com.single.code.tool.rxjava.http.body.XpJsonBody;
-import com.single.code.tool.rxjava.http.client.Callback;
-import com.single.code.tool.rxjava.http.client.XpHttpClient;
-import com.single.code.tool.rxjava.http.header.XpHeader;
-import com.single.code.tool.rxjava.http.request.XpRequest;
-import com.single.code.tool.rxjava.http.response.XpResponse;
+import com.single.code.tool.http.body.XpBaseBody;
+import com.single.code.tool.http.body.XpJsonBody;
+import com.single.code.tool.http.client.Callback;
+import com.single.code.tool.http.client.XpHttpClient;
+import com.single.code.tool.http.header.XpHeader;
+import com.single.code.tool.http.request.XpRequest;
+import com.single.code.tool.http.response.XpResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,7 +67,7 @@ public enum OkHttpApi {
             switch (msg.what) {
                 case CALLBACK_OK:
                     XpResponse rsp = (XpResponse) msg.obj;
-                   com.single.code.tool.rxjava.http.client.Callback cbok = callbacks.get(msg.arg1);
+                    com.single.code.tool.http.client.Callback cbok = callbacks.get(msg.arg1);
                     if (cbok != null) {
                         try {
                             cbok.onResponse(rsp);
@@ -78,9 +78,10 @@ public enum OkHttpApi {
                     }
                     break;
                 case CALLBACK_FAIL:
-                   com.single.code.tool.rxjava.http.client.Callback cbfail = callbacks.get(msg.arg1);
+                    com.single.code.tool.http.client.Callback cbfail = callbacks.get(msg.arg1);
                     if (cbfail != null) {
-                        cbfail.onFailure();
+                        String errorMsg = (String) msg.obj;
+                        cbfail.onFailure(errorMsg);
                         callbacks.remove(cbfail.getTag());
                     }
                     break;
@@ -200,7 +201,7 @@ public enum OkHttpApi {
         Request.Builder reqBuilder = new Request.Builder();
         String url = req.getUrl();
         if (TextUtils.isEmpty(url)) {
-            cb.onFailure();
+            cb.onFailure("url is empty");
             return;
         }
         reqBuilder.url(url);
@@ -232,7 +233,7 @@ public enum OkHttpApi {
             public void onFailure(Call arg0, IOException arg1) {
                 // TODO Auto-generated method stub
                 arg1.printStackTrace();
-                callbackFailed(cb);
+                callbackFailed(cb,arg1.getMessage());
             }
         });
     }
@@ -246,11 +247,12 @@ public enum OkHttpApi {
         handler.sendMessage(msg);
     }
 
-    private void callbackFailed(Callback cb) {
+    private void callbackFailed(Callback cb,String errorMsg) {
         callbacks.put(cb.getTag(), cb);
         Message msg = Message.obtain();
         msg.what = CALLBACK_FAIL;
         msg.arg1 = cb.getTag();
+        msg.obj = errorMsg;
         handler.sendMessage(msg);
     }
 
@@ -264,7 +266,7 @@ public enum OkHttpApi {
         Request.Builder reqBuilder = new Request.Builder();
         String url = req.getUrl();
         if (TextUtils.isEmpty(url)) {
-            cb.onFailure();
+            cb.onFailure("url is empty");
             return;
         }
         reqBuilder.url(url);
@@ -300,7 +302,7 @@ public enum OkHttpApi {
             public void onFailure(Call arg0, IOException arg1) {
                 // TODO Auto-generated method stub
                 arg1.printStackTrace();
-                callbackFailed(cb);
+                callbackFailed(cb,arg1.getMessage());
             }
         });
     }
@@ -315,7 +317,7 @@ public enum OkHttpApi {
         Request.Builder reqBuilder = new Request.Builder();
         String url = req.getUrl();
         if (TextUtils.isEmpty(url)) {
-            cb.onFailure();
+            cb.onFailure("url is empty");
             return;
         }
         reqBuilder.url(url);
@@ -353,7 +355,7 @@ public enum OkHttpApi {
             public void onFailure(Call arg0, IOException arg1) {
                 // TODO Auto-generated method stub
                 arg1.printStackTrace();
-                callbackFailed(cb);
+                callbackFailed(cb,arg1.getMessage());
             }
         });
     }
@@ -363,7 +365,7 @@ public enum OkHttpApi {
         Request.Builder reqBuilder = new Request.Builder();
         String url = req.getUrl();
         if (TextUtils.isEmpty(url)) {
-            cb.onFailure();
+            cb.onFailure("url is empty");
             return;
         }
         reqBuilder.url(url);
@@ -399,7 +401,7 @@ public enum OkHttpApi {
             public void onFailure(Call arg0, IOException arg1) {
                 // TODO Auto-generated method stub
                 arg1.printStackTrace();
-                callbackFailed(cb);
+                callbackFailed(cb,arg1.getMessage());
             }
         });
     }
@@ -415,7 +417,7 @@ public enum OkHttpApi {
 		Request.Builder reqBuilder = new Request.Builder();
 		String url = req.getUrl();
 		if(TextUtils.isEmpty(url)) {
-			cb.onFailure();
+			cb.onFailure("url is empty");
 			return ;
 		}
 		reqBuilder.url(url);
@@ -456,9 +458,9 @@ public enum OkHttpApi {
 				// TODO Auto-generated method stub
 				arg1.printStackTrace();
 				if(rspOnUi) {
-					callbackFailed(cb);
+					callbackFailed(cb,arg1.getMessage());
 				}else {
-					cb.onFailure();
+					cb.onFailure(arg1.getMessage());
 				}
 			}
 		});
@@ -473,7 +475,7 @@ public enum OkHttpApi {
 		Request.Builder reqBuilder = new Request.Builder();
 		String url = req.getUrl();
 		if(TextUtils.isEmpty(url)) {
-			cb.onFailure();
+			cb.onFailure("url is empty");
 			return ;
 		}
 		reqBuilder.url(url);
@@ -518,14 +520,52 @@ public enum OkHttpApi {
 				// TODO Auto-generated method stub
 				arg1.printStackTrace();
 				if(rspOnUi) {
-					callbackFailed(cb);
+					callbackFailed(cb,arg1.getMessage());
 				}else {
-					cb.onFailure();
+					cb.onFailure(arg1.getMessage());
 				}
 			}
 		});
 	}
 
+
+    /**
+     * 上传文件
+     * @param request
+     * @param cb
+     * @param rspOnUi
+     */
+    public  void postFile(Request request, final Callback cb, final boolean rspOnUi){
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onResponse(Call arg0, Response response) throws IOException {
+                // TODO Auto-generated method stub
+                XpResponse rsp = new XpResponse();
+                rsp.setCode(response.code());
+                rsp.setResponse(response.body().string());
+                if(rspOnUi) {
+                    callbackOk(cb, rsp);
+                }else {
+                    try {
+                        cb.onResponse(rsp);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call arg0, IOException arg1) {
+                // TODO Auto-generated method stub
+                arg1.printStackTrace();
+                if(rspOnUi) {
+                    callbackFailed(cb,arg1.getMessage());
+                }else {
+                    cb.onFailure(arg1.getMessage());
+                }
+            }
+        });
+    }
 	/**
 	 * Put
 	 * @param req
@@ -535,7 +575,7 @@ public enum OkHttpApi {
 		Request.Builder reqBuilder = new Request.Builder();
 		String url = req.getUrl();
 		if(TextUtils.isEmpty(url)) {
-			cb.onFailure();
+			cb.onFailure("url is empty");
 			return ;
 		}
 		reqBuilder.url(url);
@@ -582,9 +622,9 @@ public enum OkHttpApi {
 				// TODO Auto-generated method stub
 				arg1.printStackTrace();
 				if(rspOnUi) {
-					callbackFailed(cb);
+					callbackFailed(cb,arg1.getMessage());
 				}else {
-					cb.onFailure();
+					cb.onFailure(arg1.getMessage());
 				}
 			}
 		});

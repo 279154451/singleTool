@@ -1,14 +1,16 @@
-package com.single.code.tool.rxjava.http.client;
+package com.single.code.tool.http.client;
 
 
 import android.text.TextUtils;
 
 
-import com.single.code.tool.rxjava.http.api.OkHttpApi;
-import com.single.code.tool.rxjava.http.request.XpRequest;
+import com.single.code.tool.http.api.OkHttpApi;
+import com.single.code.tool.http.request.XpRequest;
 
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import okhttp3.Request;
 
 /**
  * 
@@ -37,6 +39,15 @@ public enum XpHttpClient implements BaseClient{
 
 	public InputStream getCertificate() {
 		return certificate;
+	}
+
+	@Override
+	public void newCall(Request req, Callback cb){
+		if(req.isHttps()){
+			OkHttpApi.HTTPS.postFile(req, cb,false);
+		}else {
+			OkHttpApi.HTTP.postFile(req, cb,false);
+		}
 	}
 
 

@@ -1,4 +1,4 @@
-package com.single.code.tool.rxjava.http.body;
+package com.single.code.tool.http.body;
 
 /**
  * 

@@ -1,7 +1,7 @@
-package com.single.code.tool.rxjava.http.client;
+package com.single.code.tool.http.client;
 
 
-import com.single.code.tool.rxjava.http.response.XpResponse;
+import com.single.code.tool.http.response.XpResponse;
 
 /**
  * 
@@ -11,7 +11,7 @@ import com.single.code.tool.rxjava.http.response.XpResponse;
 public abstract class Callback {
 	private int tag;
 	public abstract void onResponse(XpResponse rsp) throws Exception;
-	public abstract void onFailure();
+	public abstract void onFailure(String errorMsg);
 	
 	protected void addTag(int t) {
 		tag = t;
