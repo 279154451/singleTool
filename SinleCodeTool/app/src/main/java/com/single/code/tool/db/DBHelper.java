@@ -170,6 +170,32 @@ public class DBHelper extends SQLiteOpenHelper {
             return database;
         }
     }
+    private SQLiteDatabase getDatabaseLocked(boolean writable,int oldVersion,int newVersion) {
+        SQLiteDatabase db;
+        if(writable){
+            db = getWriteDatabase();
+        }else {
+            db = getReadDatabase();
+        }
+        db.beginTransaction();
+        try {
+            if (db.getVersion() == 0) {
+                onCreate(db);
+            } else {
+                if (db.getVersion() > newVersion) {
+                    onDowngrade(db, db.getVersion(), newVersion);
+                } else {
+                    onUpgrade(db, db.getVersion(), newVersion);
+                }
+            }
+            db.setVersion(newVersion);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            return db;
+        }
+    }
+
     public void closeDatabase(SQLiteDatabase database){
         if(database!=null&& database.isOpen()){
             Log.d(TAG,"closeDatabase");
@@ -289,6 +315,12 @@ public class DBHelper extends SQLiteOpenHelper {
             initDBEvent.onUpgrade(db,oldVersion,newVersion);
         }
     }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        super.onDowngrade(db, oldVersion, newVersion);
+    }
+
 
     private Handler eventHandler = new Handler(Looper.getMainLooper()){
         @Override

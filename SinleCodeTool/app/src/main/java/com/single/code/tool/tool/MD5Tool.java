@@ -20,7 +20,7 @@ public class MD5Tool {
         }
 
 
-        
+
         byte[] nullMd5 = new byte[MD5_BYTE_SIZE];
         Arrays.fill(nullMd5, (byte) 0);//初始化
         return nullMd5;
