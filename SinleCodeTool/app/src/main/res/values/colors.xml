@@ -444,5 +444,7 @@
 
     <color name="navy">#000080</color>
     <!--海军色 -->
-
+    <color name="grey">#B6B6B6</color>
+    <color name="pressed_blue">#1aa4fc</color>
+    <color name="textcolor_bottombar">#1AA1E6</color>
 </resources>
