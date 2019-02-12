@@ -1,7 +1,7 @@
-package com.single.code.tool.factory;
+package com.single.code.tool.DesignPatterns.factory;
 
-import com.single.code.tool.factory.base.IoProduct;
-import com.single.code.tool.factory.entity.FileIoEntity;
+import com.single.code.tool.DesignPatterns.factory.base.IoProduct;
+import com.single.code.tool.DesignPatterns.factory.entity.FileIoEntity;
 
 /**
  * Created by czf on 2019/1/29.

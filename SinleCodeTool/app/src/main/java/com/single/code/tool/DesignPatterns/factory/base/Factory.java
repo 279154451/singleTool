@@ -1,6 +1,4 @@
-package com.single.code.tool.factory.base;
-
-import com.single.code.tool.factory.base.IoProduct;
+package com.single.code.tool.DesignPatterns.factory.base;
 
 /**
  * 工厂
