@@ -1,7 +1,9 @@
 package com.single.code.tool.widget;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,6 +25,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class PullToRefreshView extends LinearLayout {
+    private static final String TAG = "PullToRefreshView";
     private boolean canScroolUp = false;// 是否可以上拉
     private boolean canScrooldown = true;// 是否可以下拉
 
@@ -68,6 +71,8 @@ public class PullToRefreshView extends LinearLayout {
      * scrollview
      */
     private ScrollView mScrollView;
+
+    private RecyclerView mRecyclerView;
     /**
      * header view height
      */
@@ -259,10 +264,14 @@ public class PullToRefreshView extends LinearLayout {
                 // finish later
                 mScrollView = (ScrollView) view;
             }
+            if (view instanceof RecyclerView) {
+                // finish later
+                mRecyclerView = (RecyclerView) view;
+            }
         }
-        if (mAdapterView == null && mScrollView == null) {
+        if (mAdapterView == null && mScrollView == null && mRecyclerView == null) {
             throw new IllegalArgumentException(
-                    "must contain a AdapterView or ScrollView in this layout!");
+                    "must contain a AdapterView, ScrollView or RecyclerView in this layout!");
         }
     }
 
@@ -304,6 +313,7 @@ public class PullToRefreshView extends LinearLayout {
                 if (yDiff <= MIN_Y_VALUE || xDiff >= yDiff) {
                     return false;
                 }
+                Log.d(TAG, "onInterceptTouchEvent: isRefreshViewScroll(deltaY) = " + isRefreshViewScroll(deltaY));
                 if (isRefreshViewScroll(deltaY)) {
                     return true;
                 }
@@ -455,8 +465,12 @@ public class PullToRefreshView extends LinearLayout {
                 }
                 int top = child.getTop();
                 int padding = mAdapterView.getPaddingTop();
+                Log.d(TAG, "isRefreshViewScroll: mAdapterView.getFirstVisiblePosition() = " + mAdapterView.getFirstVisiblePosition());
+                Log.d(TAG, "isRefreshViewScroll: top = " + top);
+                Log.d(TAG, "isRefreshViewScroll: padding = " + padding);
+                Log.d(TAG, "isRefreshViewScroll: Math.abs(top - padding) = " + Math.abs(top - padding));
                 if (mAdapterView.getFirstVisiblePosition() == 0
-                        && Math.abs(top - padding) <= 8) {// 这里之前用3可以判断,但现在不行,还没找到原因
+                        && Math.abs(top - padding) <= 8) {// listView快置顶时，也可以下拉
                     mPullState = PULL_DOWN_STATE;
                     return true;
                 }
@@ -483,14 +497,60 @@ public class PullToRefreshView extends LinearLayout {
         if (mScrollView != null) {
             // 子scroll view滑动到最顶端
             View child = mScrollView.getChildAt(0);
+            Log.d(TAG, "isRefreshViewScroll: child.getHeight() = " + child.getHeight());
+            Log.d(TAG, "isRefreshViewScroll: child.getMeasuredHeight() = " + child.getMeasuredHeight());
+            Log.d(TAG, "isRefreshViewScroll: getHeight() = " + getHeight());
+            Log.d(TAG, "isRefreshViewScroll: mScrollView.getScrollY() = " + mScrollView.getScrollY());
+            Log.d(TAG, "isRefreshViewScroll: child.getBottom() = " + child.getBottom());
             if (deltaY > 0 && mScrollView.getScrollY() == 0) {
                 mPullState = PULL_DOWN_STATE;
                 return true;
             } else if (deltaY < 0
-                    && child.getMeasuredHeight() <= getHeight()
+                    && child.getMeasuredHeight() <= getHeight() //这里child.getBottom == getMeasuredHeight == getHeight
                     + mScrollView.getScrollY()) {
                 mPullState = PULL_UP_STATE;
                 return true;
+            }
+        }
+        if (mRecyclerView != null) {
+            // 子view(ListView or GridView)滑动到最顶端
+            if (deltaY > 0) {
+                View child = mRecyclerView.getChildAt(0);
+                if (child == null) {
+                    // 如果mAdapterView中没有数据,不拦截
+                    mPullState = PULL_DOWN_STATE;
+                    return canScroolUpNodata;
+                }
+//                if (mRecyclerView.getChildAt(0) == 0
+//                        && child.getTop() == 0) {
+//                    mPullState = PULL_DOWN_STATE;
+//                    return true;
+//                }top<=paddingTop
+                int top = child.getTop();
+                int padding = mRecyclerView.getPaddingTop();
+//                Log.d(TAG, "isRefreshViewScroll: mAdapterView.getFirstVisiblePosition() = " + mRecyclerView.getFirstVisiblePosition());
+                Log.d(TAG, "isRefreshViewScroll: top = " + top);
+                Log.d(TAG, "isRefreshViewScroll: padding = " + padding);
+                Log.d(TAG, "isRefreshViewScroll: Math.abs(top - padding) = " + Math.abs(top - padding));
+                if (Math.abs(top - padding) <= 8) {
+                    mPullState = PULL_DOWN_STATE;
+                    return true;
+                }
+
+            } else if (deltaY < 0) {
+                View lastChild = mRecyclerView.getChildAt(mRecyclerView
+                        .getChildCount() - 1);
+                if (lastChild == null) {
+                    // 如果mAdapterView中没有数据,不拦截
+                    mPullState = PULL_UP_STATE;
+                    return canScroolDownNoData;
+                }
+                // 最后一个子view的Bottom小于父View的高度说明mAdapterView的数据没有填满父view,
+                // 等于父View的高度说明mAdapterView已经滑动到最后
+                if (lastChild.getBottom() <= getHeight()) {
+                    mPullState = PULL_UP_STATE;
+                    return true;
+                }
             }
         }
         return false;
@@ -581,7 +641,7 @@ public class PullToRefreshView extends LinearLayout {
      *
      * @description hylin 2012-7-31上午9:10:12
      */
-    public void headerRefreshing() {
+    private void headerRefreshing() {
         mHeaderState = REFRESHING;
         setHeaderTopMargin(0);
         mHeaderImageView.setVisibility(View.GONE);
